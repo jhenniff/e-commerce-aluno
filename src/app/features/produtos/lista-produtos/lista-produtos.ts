@@ -3,6 +3,8 @@ import { Produto } from '../produto/produto';
 import { signal } from '@angular/core';
 import {computed} from '@angular/core';
 import {PrecoFormatadoPipe} from '../../../shared/pipes/preco-formatado-pipe';
+import { effect } from '@angular/core';
+
 
 @Component({
   selector: 'app-lista-produtos',
@@ -11,7 +13,7 @@ import {PrecoFormatadoPipe} from '../../../shared/pipes/preco-formatado-pipe';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
- produtos = signal ([
+produtos = signal ([
     { 
       nome: 'Teclado Gamer', 
       preco:149.00
@@ -36,13 +38,41 @@ export class ListaProdutos {
   //funcao para exibir o produto selecionado pelo usuario no console
   exibirProduto (nome: string){
     console.log ('Produto selecionado: ', nome);
+    this.produtoSelecionado.set(nome);
   }
-
+//funcao que adciona o produto
   adicionaProduto(){
     this.produtos.update(listaAtual => [
-      ...listaAtual, {nome: 'Sony Playstation 5', preco: 1000}
+      ...listaAtual, {nome: 'Sony Playstation 5', preco: 3000}
     ]);
   }
-  totalProdutos = computed(()) => this.produtos().length;
+  totalProdutos = computed(() => this.produtos().length);
+  valorTotal = computed(() => this.produtos().reduce((total, produto) => total + produto.preco, 0));
+  //funcao para substituir a lista atual usando o metodo set do signal
+substituirProduto(){
+  this.produtos.set([
+    {nome: 'Teclado', preco:50},
+    {nome: 'Mouse', preco:15},
+    {nome: 'Monitor', preco:500},
+    {nome: 'Desktop', preco:1500},
+    {nome: 'Headset', preco:30}
+  ]);
+}
+constructor(){
+effect(() => {
+  console.log('lista de produtos alterados: ', this.produtos());
+});
+effect(() => {
+  console.log('Valor Total Atualizado: ', this.valorTotal());
+});
+effect(() => {
+  if (typeof document !== 'undefined') {
+    document.title = `(${this.totalProdutos()}) - loja da jhennif`;
+  }
 
+});
+}
+produtoSelecionado= signal <string | null>(null);
+}
+ 
   
