@@ -72,7 +72,20 @@ effect(() => {
 
 });
 }
-produtoSelecionado= signal <string | null>(null);
-}
  
-  
+produtoSelecionado= signal <string | null>(null);
+//metodo para criar um estado para carrinho com signal
+carrinho = signal <{nome: string; preco: number}[]>([]);
+adicionarAoCarrinho(produto:{nome: string; preco: number}){
+  this.carrinho.update(listaAtual =>[...listaAtual, produto]
+  );
+}
+//totalProduto = computed (() => this.prdutos().length);
+//metodo para calcular a quantidade total de item do carrinho 
+quantidadedeCarrinho = computed(() => this.carrinho().length);
+//metodo para calcular o valor total dos itens do carrinho
+totalCarrinho =computed (() =>{
+  return this.carrinho().reduce((total, item) =>
+  total + item.preco,0)});
+
+}
