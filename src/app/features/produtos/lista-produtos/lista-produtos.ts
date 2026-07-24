@@ -4,6 +4,7 @@ import { signal } from '@angular/core';
 import {computed} from '@angular/core';
 import {PrecoFormatadoPipe} from '../../../shared/pipes/preco-formatado-pipe';
 import { effect } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -13,28 +14,10 @@ import { effect } from '@angular/core';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
-produtos = signal ([
-    { 
-      nome: 'Teclado Gamer', 
-      preco:149.00
-    },
-    {
-      nome: 'Mouse Gamer', 
-      preco:299.99
-    },
-    {
-      nome: 'Monitor Gamer', 
-      preco:1599.99
-    },
-    {
-      nome: 'Desktop Gamer', 
-      preco:4999.99
-    },
-    {
-      nome: 'Headset Gamer', 
-      preco:699.99
-    }
-  ]);
+produtos = signal <{nome: string; preco: number}[]>([]);
+
+carregando = signal (true);
+
   //funcao para exibir o produto selecionado pelo usuario no console
   exibirProduto (nome: string){
     console.log ('Produto selecionado: ', nome);
@@ -58,7 +41,8 @@ substituirProduto(){
     {nome: 'Headset', preco:30}
   ]);
 }
-constructor(){
+constructor(private http: HttpClient){
+  this.carregarProdutos();
 effect(() => {
   console.log('lista de produtos alterados: ', this.produtos());
 });
@@ -69,23 +53,42 @@ effect(() => {
   if (typeof document !== 'undefined') {
     document.title = `(${this.totalProdutos()}) - loja da jhennif`;
   }
-
 });
 }
- 
-produtoSelecionado= signal <string | null>(null);
-//metodo para criar um estado para carrinho com signal
+ //!funcao 
+produtoSelecionado = signal <string | null>(null);
+//!metodo para criar um estado para carrinho com signal
 carrinho = signal <{nome: string; preco: number}[]>([]);
 adicionarAoCarrinho(produto:{nome: string; preco: number}){
   this.carrinho.update(listaAtual =>[...listaAtual, produto]
   );
 }
-//totalProduto = computed (() => this.prdutos().length);
+//!totalProduto = computed (() => this.prdutos().length);
 //metodo para calcular a quantidade total de item do carrinho 
 quantidadedeCarrinho = computed(() => this.carrinho().length);
-//metodo para calcular o valor total dos itens do carrinho
+//!metodo para calcular o valor total dos itens do carrinho
 totalCarrinho =computed (() =>{
   return this.carrinho().reduce((total, item) =>
   total + item.preco,0)});
 
+  carregarProdutos(){
+this.carregando.set(true);
+this.http.get<{title: string; price: number}[]>
+('https://fakestoreapi.com/products').subscribe({
+  next: (dados) => {
+    const produtosFormatados = dados.map(p => ({
+      nome: p.title,
+      preco: p.price,
+    }));
+    this.produtos.set(produtosFormatados);
+    this.carregando.set(false);
+  },
+  error:(erro) =>{
+    console.error('Erro ao carregar produtos: ', erro);
+    this.carregando.set(false);
+  }
+});
+
+  }
 }
+
