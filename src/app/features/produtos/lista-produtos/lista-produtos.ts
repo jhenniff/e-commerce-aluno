@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { signal } from '@angular/core';
 import {computed} from '@angular/core';
 import {PrecoFormatadoPipe} from '../../../shared/pipes/preco-formatado-pipe';
 import { effect } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
+import { UpperCasePipe}  from '@angular/common';
+import { produtosService } from '../produtos.service';
 
 @Component({
   selector: 'app-lista-produtos',
@@ -14,16 +14,17 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
+  
 produtos = signal <{nome: string; preco: number}[]>([]);
 
 carregando = signal (true);
 
-  //funcao para exibir o produto selecionado pelo usuario no console
+  //!funcao para exibir o produto selecionado pelo usuario no console
   exibirProduto (nome: string){
     console.log ('Produto selecionado: ', nome);
     this.produtoSelecionado.set(nome);
   }
-//funcao que adciona o produto
+//!funcao que adciona o produto
   adicionaProduto(){
     this.produtos.update(listaAtual => [
       ...listaAtual, {nome: 'Sony Playstation 5', preco: 3000}
@@ -41,7 +42,7 @@ substituirProduto(){
     {nome: 'Headset', preco:30}
   ]);
 }
-constructor(private http: HttpClient){
+constructor(){
   this.carregarProdutos();
 effect(() => {
   console.log('lista de produtos alterados: ', this.produtos());
@@ -72,23 +73,20 @@ totalCarrinho =computed (() =>{
   total + item.preco,0)});
 
   carregarProdutos(){
-this.carregando.set(true);
-this.http.get<{title: string; price: number}[]>
-('https://fakestoreapi.com/products').subscribe({
-  next: (dados) => {
-    const produtosFormatados = dados.map(p => ({
-      nome: p.title,
-      preco: p.price,
-    }));
-    this.produtos.set(produtosFormatados);
-    this.carregando.set(false);
-  },
-  error:(erro) =>{
-    console.error('Erro ao carregar produtos: ', erro);
-    this.carregando.set(false);
-  }
-});
+    this.carregando.set(true);
+    this.produtoService.buscarProdutos().subscribe({
+      next: (dados) => {
+        const produtos = this.produtoService.transformarProdutos(dados);
+        this.produtos.set(produtos);
+        this.carregando.set(false);
+      },
+      error: (erro) =>{
+        console.error('Erro ao carregar produtos: ', erro);
+        this.carregando.set(false);
+      }
+    })
 
   }
+  private produtoService = inject(produtosService);
 }
 
