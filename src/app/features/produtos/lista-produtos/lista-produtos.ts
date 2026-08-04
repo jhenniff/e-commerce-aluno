@@ -65,7 +65,7 @@ adicionarAoCarrinho(produto:{nome: string; preco: number}){
   );
 }
 //!totalProduto = computed (() => this.prdutos().length);
-//metodo para calcular a quantidade total de item do carrinho 
+//!metodo para calcular a quantidade total de item do carrinho 
 quantidadedeCarrinho = computed(() => this.carrinho().length);
 //!metodo para calcular o valor total dos itens do carrinho
 totalCarrinho =computed (() =>{
