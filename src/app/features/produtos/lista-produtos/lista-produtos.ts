@@ -14,6 +14,7 @@ import { produtosService } from '../produtos.service';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
+  erro = signal <string | null>(null);
   
 produtos = signal <{nome: string; preco: number}[]>([]);
 
