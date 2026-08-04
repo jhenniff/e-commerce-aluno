@@ -12,7 +12,9 @@ type Produto ={
     preco: number;
 };
 @Injectable({ providedIn:'root'})
+
 export class produtosService{
+    
     private http = inject(HttpClient);
     private API = 'https://fakestoreapi.com/products'
    
