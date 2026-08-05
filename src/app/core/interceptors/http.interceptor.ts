@@ -6,7 +6,7 @@ import {throwError} from "rxjs";
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
-  console.log('Interceptando requisição HTTP:', req.url);
+  console.log('Interceptando requisição:', req.url);
   
   const token = 'fake-token-jwt'; 
   
@@ -24,15 +24,15 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
     
         console.error('Erro de requisição global:', error);
     if (error.status === 401) {
-        console.error('Erro de autenticação de usuário!', error);   
+        console.warn('Usuário nao autorizado!', error);   
       }
      if(error.status === 500){
-        console.warn('Erro interno do servidor!');
+        console.warn('Erro interno do servidor!', error);
      }
-     return throwError(() => new error);
+     return throwError(() =>error);
  
 
- } )
+ } ),
   );
 
 }; 
