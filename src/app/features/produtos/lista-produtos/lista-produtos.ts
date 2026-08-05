@@ -9,12 +9,11 @@ import { produtosService } from '../produtos.service';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, PrecoFormatadoPipe],
+  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
-  erro = signal <string | null>(null);
   
 produtos = signal <{nome: string; preco: number}[]>([]);
 
@@ -74,7 +73,9 @@ totalCarrinho =computed (() =>{
   total + item.preco,0)});
 
   carregarProdutos(){
+    this.erro.set(null);
     this.carregando.set(true);
+
     this.produtoService.buscarProdutos().subscribe({
       next: (dados) => {
         const produtos = this.produtoService.transformarProdutos(dados);
@@ -84,10 +85,16 @@ totalCarrinho =computed (() =>{
       error: (erro) =>{
         console.error('Erro ao carregar produtos: ', erro);
         this.carregando.set(false);
+        this.erro.set('Erro ao Carregar Produtos. Por Favor, tente novamente mais tarde')
+        this.carregando.set(false);
+
       }
     })
 
   }
   private produtoService = inject(produtosService);
+  erro = signal <string | null>(null);
+
+  
 }
 
