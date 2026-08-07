@@ -1,7 +1,11 @@
 
- 
+     <h2>Produtos</h2>
+     @if(carregando()){
+     <p><strong>carregando produtos, aguarde...</strong></p>
+
+     }
     
-        <p><strong>carregando produtos, aguarde...</strong></p>
+       
     
     @if(erro()){
         <p><strong style="color: red;">{{ erro() }}</strong></p>
@@ -11,8 +15,9 @@
         
 
         <p><strong>Quantidade de produtos: </strong>{{ totalProdutos() }}</p>
-        <hr>
-            @for(item of produtos(); track $index){
+
+        <section  class="grid-produtos">
+        @for(item of produtos(); track $index){
                 <app-produto
                 [nome] = "item.nome"
                 [preco] = "item.preco"
@@ -21,6 +26,9 @@
                 >
                 </app-produto>
             }
+ 
+        </section>
+            
                 
         }
         <section>
