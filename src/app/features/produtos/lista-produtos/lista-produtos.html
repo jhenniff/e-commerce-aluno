@@ -36,17 +36,16 @@
             <hr>
             <hr>
             <h2>Seu carrinho</h2>
-            @for (item of carrinho(); track $index){
+            @for (item of carrinhoService.itens();  track $index){
                 <p>{{item.nome | uppercase }} - {{item.preco | precoFormatado}}</p>
             }
             
             <hr>
-            <h3><strong>item no Carrinho</strong></h3>
+            <h3><strong>item no Carrinho: {{carrinhoService.quantidadeItens()}}</strong></h3>
 
-            <h3><strong>Valor total do Carrinho:{{totalCarrinho() | precoFormatado}}</strong></h3>
+            <h3><strong>Valor total do Carrinho:{{ carrinhoService.totalItens() | precoFormatado}}</strong></h3>
 
             <hr>
         </section>
     
-        <p>A SEGUIR VEJA NOSSAS PROMOÇÕES DE HOJE;</p>
     
