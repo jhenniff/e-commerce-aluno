@@ -5,7 +5,8 @@ import {computed} from '@angular/core';
 import {PrecoFormatadoPipe} from '../../../shared/pipes/preco-formatado-pipe';
 import { effect } from '@angular/core';
 import { UpperCasePipe}  from '@angular/common';
-import { produtosService } from '../produtos.service';
+import { produtosService } from '../../../core/services/produtos.service';
+import { CarrinhoService } from '../../../core/services/carrinho.service';
 
 @Component({
   selector: 'app-lista-produtos',
@@ -14,10 +15,23 @@ import { produtosService } from '../produtos.service';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
+  //!==================signal===============>
   
 produtos = signal <{nome: string; preco: number}[]>([]);
 
+produtoSelecionado =signal <string | null>(null);
+
+ erro = signal <string | null>(null);
+
 carregando = signal (true);
+
+//?=============================COMPUTED================
+ totalProdutos = computed(() => this.produtos().length);
+
+ //! funcao calcula o valor total dos produtos
+  valorTotal = computed(() => this.produtos().reduce((total, produto) => total + produto.preco, 0));
+
+//FUNCAO QUE CONTABILIZA A QUANTIDADE A QUANTIDADE DE ITENS DA LISTA 
 
   //!funcao para exibir o produto selecionado pelo usuario no console
   exibirProduto (nome: string){
@@ -30,8 +44,8 @@ carregando = signal (true);
       ...listaAtual, {nome: 'Sony Playstation 5', preco: 3000}
     ]);
   }
-  totalProdutos = computed(() => this.produtos().length);
-  valorTotal = computed(() => this.produtos().reduce((total, produto) => total + produto.preco, 0));
+ 
+  
   //funcao para substituir a lista atual usando o metodo set do signal
 substituirProduto(){
   this.produtos.set([
@@ -56,21 +70,8 @@ effect(() => {
   }
 });
 }
- //!funcao 
-produtoSelecionado = signal <string | null>(null);
-//!metodo para criar um estado para carrinho com signal
-carrinho = signal <{nome: string; preco: number}[]>([]);
-adicionarAoCarrinho(produto:{nome: string; preco: number}){
-  this.carrinho.update(listaAtual =>[...listaAtual, produto]
-  );
-}
-//!totalProduto = computed (() => this.prdutos().length);
-//!metodo para calcular a quantidade total de item do carrinho 
-quantidadedeCarrinho = computed(() => this.carrinho().length);
-//!metodo para calcular o valor total dos itens do carrinho
-totalCarrinho =computed (() =>{
-  return this.carrinho().reduce((total, item) =>
-  total + item.preco,0)});
+
+
 
   carregarProdutos(){
     this.erro.set(null);
@@ -93,8 +94,19 @@ totalCarrinho =computed (() =>{
 
   }
   private produtoService = inject(produtosService);
-  erro = signal <string | null>(null);
 
+  public carrinhoService = inject(CarrinhoService);
+
+  quantidadeCarrinho = this.carrinhoService.quantidadeItens;
+
+  totalCarrinho = this.carrinhoService.totalItens;
   
+  adicionarAoCarrinho(produto: {nome: string; preco: number; }){
+    this.carrinhoService.adicionar(produto);
+  }
+
+ 
 }
+  
+
 
