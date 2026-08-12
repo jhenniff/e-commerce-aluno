@@ -29,22 +29,27 @@ carregando = signal (true);
  totalProdutos = computed(() => this.produtos().length);
 
  //! funcao calcula o valor total dos produtos
-  valorTotal = computed(() => this.produtos().reduce((total, produto) => total + produto.preco, 0));
+  valorTotal = computed(() =>
+     this.produtos().reduce((total, produto) => 
+      total + produto.preco, 0));
 
-//FUNCAO QUE CONTABILIZA A QUANTIDADE A QUANTIDADE DE ITENS DA LISTA 
+  //!=========================inject=============== 
+
+
 
   //!funcao para exibir o produto selecionado pelo usuario no console
   exibirProduto (nome: string){
     console.log ('Produto selecionado: ', nome);
     this.produtoSelecionado.set(nome);
   }
-//!funcao que adciona o produto
+    private produtoService = inject(produtosService);
+
+    //!funcao que adciona produto usando metodo update
   adicionaProduto(){
-    this.produtos.update(listaAtual => [
-      ...listaAtual, {nome: 'Sony Playstation 5', preco: 3000}
+    this.produtos.update(listaAtual => [...listaAtual,
+       {nome: 'Sony Playstation 5', preco: 3000}
     ]);
   }
- 
   
   //funcao para substituir a lista atual usando o metodo set do signal
 substituirProduto(){
@@ -56,6 +61,8 @@ substituirProduto(){
     {nome: 'Headset', preco:30}
   ]);
 }
+
+// METODO PARA MONITORAR ALTERACOES EM TEMPO REAL USANDO EFFECT
 constructor(){
   this.carregarProdutos();
 effect(() => {
@@ -70,7 +77,6 @@ effect(() => {
   }
 });
 }
-
 
 
   carregarProdutos(){
@@ -93,14 +99,12 @@ effect(() => {
     })
 
   }
-  private produtoService = inject(produtosService);
+  
 
   public carrinhoService = inject(CarrinhoService);
 
   quantidadeCarrinho = this.carrinhoService.quantidadeItens;
-
-  totalCarrinho = this.carrinhoService.totalItens;
-  
+ totalCarrinho = this.carrinhoService.totalItens;
   adicionarAoCarrinho(produto: {nome: string; preco: number; }){
     this.carrinhoService.adicionar(produto);
   }
