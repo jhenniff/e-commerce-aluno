@@ -1,7 +1,7 @@
-import {HttpInterceptorFn} from "@angular/common/http";
-import {tap} from "rxjs" ;
-import {catchError} from "rxjs";
-import {throwError} from "rxjs";
+import {HttpInterceptorFn, HttpResponse} from '@angular/common/http';
+import {tap} from 'rxjs' ;
+import {catchError, filter} from 'rxjs';
+import {throwError} from 'rxjs';
 
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
