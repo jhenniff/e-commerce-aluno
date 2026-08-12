@@ -1,7 +1,60 @@
 <h2>Checkout</h2>
+@if ((compraFinalizada())) {
+    
+    <p style="color: green;">Compra finalizada com sucesso</p>
+}
+@if(carrinhoService.carrinhoVazio()){
+    <p style="color: red;"></p> carrinho está vazio!/p>
+    <p  style="color: red;"></p>Adicione Produtos antes de finalizar qa compra!/p>
+
+    }
+@else {
+    <section>
+        <h3> resumo da compra</h3>
+    </section>
+    @for(item  of carrinhoService.itens();  track $index) {
+        <p>{{item.nome}} - R$ {{item.preco.toFixed(2)}}</p>
+    }
+}
+
 <form [formGroup]="formulario">
-    <p><input type="text" formControlName= "nome" placeholder="Digite seu nome completo"></p>
-    <p><input type="text" formControlName= "email" placeholder="Digite seu E-mail"></p>
-    <p><input type="text" formControlName= "endereco" placeholder=" Digite seu Endereço"></p>
-    <button type="button" (click)="finalizar()">Finalizar compra</button>
+   
+    <p><input type="text" formControlName="nome" placeholder=" Digite seu nome completo"></p>
+
+    @if(formulario.get('nome')?.touched && formulario.get('nome')?.errors?.['required']){
+        <small style="color: red;">NOME É OBRIGATÓRIO</small>
+    }
+    @if(formulario.get('nome')?.errors?.['minlength']){
+        <small style="color: red;">NOME DEVE TER NO MÍNIMO (2) DUAS LETRAS</small>
+    }
+    @if(formulario.get('nome')?.errors?.['numeroInvalido']){
+        <small style="color: red;">NOME NAO PODE CONTER NÚMEROS</small>
+    }
+
+
+
+    <p><input type="email" formControlName="email" placeholder=" Digite seu Email"></p>
+    @if (formulario.get('email')?.touched && formulario.get('email')?.invalid) {
+     @if (formulario.get('email')?.errors?.['required']) {
+     <small> EMAIL É OBRIGATÓRIO </small>
+   }
+     @if (formulario.get('email')?.errors?.['email']) {
+      <small> EMAIL INVÁLIDO </small>
+   }
+}
+    <p><input type="text" formControlName="endereco" placeholder=" Digite seu Endereço"></p>
+    @if (formulario.get('endereco')?.touched && formulario.get('endereco')?.invalid) {
+      @if (formulario.get('endereco')?.errors?.['required']) {
+         <small>ENDEREÇO É OBRIGATÓRIO</small>
+  }
+    @if (formulario.get('endereco')?.errors?.['minlength']) {
+         <small>ENDEREÇO DEVE TER NO MÍNIMO 5 CARACTERES</small>
+  }
+}
+
+
+
+    <p></p>
+    <button type="button" (click)="finalizar()" [disabled]="formulario.invalid">
+        Efetuar Compra</button>
 </form>
