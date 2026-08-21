@@ -1,15 +1,8 @@
 <app-header></app-header>
+
 <main class="container-principal">
-
-<section class="bloco-controle">
-<button mat-raised-button color="primary" (click)="login()">login</button>
-<button mat-raised-button color="acent" (click)="logout()">logout</button>
-<p> Status {{usuarioLogado() ? 'Logado' : 'Desligado'}}</p>
-</section>
-
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </main>
-
 
 
 
