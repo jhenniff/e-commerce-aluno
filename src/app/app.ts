@@ -1,24 +1,13 @@
-import { UpperCasePipe } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { LowerCasePipe } from '@angular/common'; 
-import { usuarioLogado, login, logout } from './core/auth';
-import { MatButtonModule } from '@angular/material/button';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
 import { Header } from './shared/layout/header/header';
-
-
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, UpperCasePipe, MatButtonModule, Header],
+  standalone:true,
+  imports: [RouterOutlet, Header],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('e-commerce-aluno');
-  nomeLoja ='Mercado Liso';
-  usuarioLogado = usuarioLogado;
-
-  login = login;
-  logout = logout;
-}
+export class App {}
