@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
 import { Produto } from '../produto/produto';
 import { signal } from '@angular/core';
 import {computed} from '@angular/core';
@@ -6,24 +7,28 @@ import {PrecoFormatadoPipe} from '../../../shared/pipes/preco-formatado-pipe';
 import { effect } from '@angular/core';
 import { UpperCasePipe}  from '@angular/common';
 import { produtosService } from '../../../core/services/produtos.service';
-import { CarrinhoService } from '../../../core/services/carrinho.service';
+// import { CarrinhoService } from '../../../core/services/carrinho.service';
+import {CarrinhoFacade} from '../../../core/facades/carrinho.facade';
+import{ItemCarrinho} from '../../../core/models/item-carrinho';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe],
+  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe, MatButtonModule],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
   //!==================signal===============>
+  produtosService = inject(produtosService);
+  
   
 produtos = signal <{nome: string; preco: number}[]>([]);
 
 produtoSelecionado =signal <string | null>(null);
-
+carregando = signal (true);
  erro = signal <string | null>(null);
 
-carregando = signal (true);
+
 
 //?=============================COMPUTED================
  totalProdutos = computed(() => this.produtos().length);
@@ -82,7 +87,6 @@ effect(() => {
   carregarProdutos(){
     this.erro.set(null);
     this.carregando.set(true);
-
     this.produtoService.buscarProdutos().subscribe({
       next: (dados) => {
         const produtos = this.produtoService.transformarProdutos(dados);
@@ -96,17 +100,29 @@ effect(() => {
         this.carregando.set(false);
 
       }
-    })
+    });
 
   }
+   exibirProdutoSelecionado(nome: string){
+    this.produtoSelecionado.set(nome);
+  }
+  adicionarProduto(){
+    this.produtos.update(listaAtual => [...listaAtual, {
+      nome: 'teclado', preco:250
+    }]);
+  }
+  substituirProdutos(){
+    this.produtos.set([
+      {nome: 'Monitor', preco: 500}]);
+    }
   
 
-  public carrinhoService = inject(CarrinhoService);
+  public carrinhoFacade = inject(CarrinhoFacade);
 
-  quantidadeCarrinho = this.carrinhoService.quantidadeItens;
- totalCarrinho = this.carrinhoService.totalItens;
+  quantidadeCarrinho = this.carrinhoFacade.quantidadeCarrinho;
+ totalCarrinho = this.carrinhoFacade.totalCarrinho();
   adicionarAoCarrinho(produto: {nome: string; preco: number; }){
-    this.carrinhoService.adicionar(produto);
+    this.carrinhoFacade.adicionarProdutoCarrinho(produto);
   }
 
  
