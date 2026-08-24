@@ -1,18 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule,FormGroup, FormControl, Validators  } from '@angular/forms';
 import { Validator, AbstractControl, ValidationErrors } from '@angular/forms';
-import { CarrinhoService } from '../../../core/services/carrinho.service';
+// import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { log } from 'console';
+import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
+import { RouterLink } from '@angular/router';
+import {PedidoFinalizado} from '../../../core/models/pedido-finalizado';
+import { PrecoFormatadoPipe } from '../../../shared/pipes/preco-formatado-pipe';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink, PrecoFormatadoPipe],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })
 export class Checkout {
- carrinhoService = inject (CarrinhoService);
+  
+ carrinhoFacade = inject (CarrinhoFacade);
+
+
  compraFinalizada =signal(false);
+ pedidoFinalizado = signal<PedidoFinalizado | null>(null);
 
    formulario = new FormGroup({
     nome: new FormControl('',[Validators.required,Validators.minLength(2),nomeSemNumeros]),
@@ -21,8 +29,9 @@ export class Checkout {
   });
   finalizar(){
     this.compraFinalizada.set(false);
+    this.pedidoFinalizado.set(null);
 
-    if(this.carrinhoService.carrinhoVazio()){
+    if(this.carrinhoFacade.carrinhoVazio()){
       console.log('Não é possivel finalizar a compra com o carrinho vazio');
       return
     }
@@ -34,17 +43,25 @@ export class Checkout {
     }
 
     const dados = this.formulario.value;
-    const itens = this.carrinhoService.itens();
-    const total = this.carrinhoService.totalItens();
+    const itens = this.carrinhoFacade.itensCarrinho();
+    const total = this.carrinhoFacade.totalCarrinho();
 
-    console.log('Dados do Formulário: ', dados);
+    const pedido={
+      codigo: Date.now(),
+      cliente: dados.nome ??'',
+      email: dados.email ??'',
+      quantidadeItens: itens.length,
+      total,
+      itens,
+    }
+
+    console.log('compraFinalizada com sucesso!');
     console.log('Itens do carrinho: ', itens)
-    console.log('Itens no carrinho: ', itens);
-    console.log('Total de compras: ', total);
+   console.log('Dados do Pedido: ', pedido)
 
-    this.carrinhoService.limpar();
+    this.carrinhoFacade.limparCarrinho();
     this.formulario.reset();
-    this.carrinhoService.totalItens();
+    this.compraFinalizada.set(true);
 
   }
 }
