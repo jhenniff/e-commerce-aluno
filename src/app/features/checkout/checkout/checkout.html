@@ -1,23 +1,50 @@
 <h2>Checkout</h2>
-@if ((compraFinalizada())) {
-    
+
+<h3>Seu carrinho esta vazio</h3>
+<p>Adicione produtos ao carrinho antes de finalizar a compra.</p>
+<button mat-raised-button color="primary" type="button" 
+routerLink="/produtos">Ver Produtos</button>
+@if (pedidoFinalizado()) {
+     <section class="pedido-finalizado">
+   <h3>Pedido Finalizado com Sucesso!</h3>
+
+   <p><strong>Codigo</strong>{{pedidoFinalizado()?.codigo}}</p>
+    <p><strong>Cliente:</strong>{{pedidoFinalizado()?.cliente}}</p>
+    <p><strong>E-mail:</strong> {{pedidoFinalizado()?.email}}</p> 
+    <p><strong>Itens Comprados:</strong>{{pedidoFinalizado()?.quantidadeItens}}</p>
+    <p><strong>Total:</strong>{{pedidoFinalizado()?.total}}</p>
+     </section>
+    <button mat-raised-button type="button" routerLink="/produtos"> Fazer compra novamente</button>
+   
     <p style="color: green;">Compra finalizada com sucesso</p>
 }
-@if(carrinhoService.carrinhoVazio()){
-    <p style="color: red;"></p> carrinho está vazio!/p>
-    <p  style="color: red;"></p>Adicione Produtos antes de finalizar qa compra!/p>
+@if(carrinhoFacade.carrinhoVazio()){
+    <p style="color: red;">carrinho está vazio!</p>
+    <p  style="color: red;">Adicione Produtos antes de finalizar a compra!</p>
+    <button mat-raised-button color="primary" type="button" routerLink="/produtos">Ver Produtos</button>
 
     }
-@else {
+ @if(!pedidoFinalizado()) {
     <section>
-        <h3> resumo da compra</h3>
-    </section>
-    @for(item  of carrinhoService.itens();  track $index) {
+        <h3> Resumo da Compra</h3>
+   
+    <p><strong>Itens do Carrinho:</strong>{{carrinhoFacade.quantidadeCarrinho()}}</p>
+    <p><strong>Total:</strong>{{carrinhoFacade.totalCarrinho() | precoFormatado}}</p>
+    <button mat-raised-button color="primary" 
+    type="button" routerLink="/carrinho">Voltar para o Carrinho</button>
+    </section>  
+
+    @for(item  of carrinhoFacade.itensCarrinho();  track $index) {
         <p>{{item.nome}} - R$ {{item.preco.toFixed(2)}}</p>
+      
+       <hr>
+
     }
 }
 
-<form [formGroup]="formulario">
+<form [formGroup]="formulario" class="form">
+    <h3>Finalizar Compra</h3>
+
    
     <p><input type="text" formControlName="nome" placeholder=" Digite seu nome completo"></p>
 
@@ -42,7 +69,8 @@
       <small> EMAIL INVÁLIDO </small>
    }
 }
-    <p><input type="text" formControlName="endereco" placeholder=" Digite seu Endereço"></p>
+    <input type="text" formControlName="endereco" placeholder=" Digite seu Endereço">
+
     @if (formulario.get('endereco')?.touched && formulario.get('endereco')?.invalid) {
       @if (formulario.get('endereco')?.errors?.['required']) {
          <small>ENDEREÇO É OBRIGATÓRIO</small>
@@ -50,11 +78,13 @@
     @if (formulario.get('endereco')?.errors?.['minlength']) {
          <small>ENDEREÇO DEVE TER NO MÍNIMO 5 CARACTERES</small>
   }
+
 }
-
-
-
-    <p></p>
-    <button type="button" (click)="finalizar()" [disabled]="formulario.invalid">
-        Efetuar Compra</button>
+      <p></p>
+       <button type="button" (click)="finalizar()" [disabled]="formulario.invalid">
+        Efetuar Compra
+    </button>
 </form>
+    
+    
+
