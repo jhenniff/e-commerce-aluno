@@ -1,0 +1,36 @@
+.painel-admin{
+    max-width: 900px;
+}
+.bloco-admin{
+    margin: 16px 0;
+}
+cards-admin {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap:16px;
+    margin: 16px 0
+}
+.cards-admin article {
+    border: 1px solid #ccc;
+    border-radius: 10 px;
+    padding: 16px;
+}
+.card-admin h3{
+    margin-top:0 ;
+}
+.card-admin p{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+    
+button{
+    margin-right:8px ;
+    margin-top: 8px;
+    padding: 8px 16px;
+}
+@media (min-widh:700px){
+    .card-admin{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

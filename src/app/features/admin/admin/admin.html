@@ -1,0 +1,40 @@
+<section>
+    <h2>área administrativa</h2>
+    <p>Somente usuario com perfil adminitrador deve conseguir acessar essa rota</p>
+    <hr>
+    <section class="bloco-admin">
+    <p><strong> E-mail:  </strong> {{usuarioAtual()?.email}} </p>
+ <p><strong> E-mail:  </strong> {{usuarioAtual()?.email}} </p>
+
+    
+</section>class='cars-admin'>
+<hr>
+
+<article>
+<h3> Produtos cadastrados </h3>
+<p>{{totalProdutosCadastrados()}}</p>
+</article>
+
+<h3>Pedidos pendentes</h3>
+<p>{{pedidosPendentes()}}</p>
+<article>
+
+</article>
+<h3> usuario cadastrados</h3>
+<p>{{usuariosCadastrados()}}</p>
+<article>
+</article>
+
+<hr>
+<section class="bloco-admin">
+    <p>
+        Nessa etapa as acoes aindda sao simuladas
+        nas proximas
+    </p>
+    <button type="button"> Cadastra Produto</button>
+    <button type="button"> Gerenciar Pedidos</button>
+    <button type="button"> Gerenciar Usuários</button>
+    <hr>
+    <button type="button" (click)="sair()">Sair</button>
+</section>
+</section >
