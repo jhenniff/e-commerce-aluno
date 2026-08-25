@@ -7,10 +7,22 @@ import { CarrinhoFacade } from '../../../core/facades/carrinho.facade';
 import { RouterLink } from '@angular/router';
 import {PedidoFinalizado} from '../../../core/models/pedido-finalizado';
 import { PrecoFormatadoPipe } from '../../../shared/pipes/preco-formatado-pipe';
+import { ItemCarrinho } from '../../../core/models/item-carrinho';
+import { MatAnchor } from "@angular/material/button";
+
+type Pedido = {
+  codigo: number;
+  cliente: string;
+  email: string;
+  quantidadeItens: number;
+  total: number;
+  itens: ItemCarrinho[];
+};
+
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, RouterLink, PrecoFormatadoPipe],
+  imports: [ReactiveFormsModule, RouterLink, PrecoFormatadoPipe, MatAnchor],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })
@@ -28,7 +40,6 @@ export class Checkout {
     endereco: new FormControl('',[Validators.required,Validators.minLength(5)]),
   });
   finalizar(){
-    this.compraFinalizada.set(false);
     this.pedidoFinalizado.set(null);
 
     if(this.carrinhoFacade.carrinhoVazio()){
@@ -46,7 +57,7 @@ export class Checkout {
     const itens = this.carrinhoFacade.itensCarrinho();
     const total = this.carrinhoFacade.totalCarrinho();
 
-    const pedido={
+    const pedido: PedidoFinalizado = {
       codigo: Date.now(),
       cliente: dados.nome ??'',
       email: dados.email ??'',
@@ -55,13 +66,14 @@ export class Checkout {
       itens,
     }
 
-    console.log('compraFinalizada com sucesso!');
+    console.log('compra Finalizada com sucesso!');
+    console.log('Pedido: ', pedido);
     console.log('Itens do carrinho: ', itens)
-   console.log('Dados do Pedido: ', pedido)
+   console.log('Dados do formulário: ', dados)
 
     this.carrinhoFacade.limparCarrinho();
     this.formulario.reset();
-    this.compraFinalizada.set(true);
+    this.pedidoFinalizado.set(pedido);
 
   }
 }

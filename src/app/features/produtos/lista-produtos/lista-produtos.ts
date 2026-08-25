@@ -10,10 +10,12 @@ import { produtosService } from '../../../core/services/produtos.service';
 // import { CarrinhoService } from '../../../core/services/carrinho.service';
 import {CarrinhoFacade} from '../../../core/facades/carrinho.facade';
 import{ItemCarrinho} from '../../../core/models/item-carrinho';
+import { RouterLink} from '@angular/router';
+import {ProdutoLoja} from '../../../core/models/produto-loja';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe, MatButtonModule],
+  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe, MatButtonModule, RouterLink],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
@@ -22,7 +24,7 @@ export class ListaProdutos {
   produtosService = inject(produtosService);
   
   
-produtos = signal <{nome: string; preco: number}[]>([]);
+produtos = signal <ProdutoLoja[]>([]);
 
 produtoSelecionado =signal <string | null>(null);
 carregando = signal (true);
@@ -37,6 +39,8 @@ carregando = signal (true);
   valorTotal = computed(() =>
      this.produtos().reduce((total, produto) => 
       total + produto.preco, 0));
+
+  valorTotalFormatado = computed(() =>this.valorTotal().toFixed(2)); 
 
   //!=========================inject=============== 
 
@@ -70,12 +74,7 @@ substituirProduto(){
 // METODO PARA MONITORAR ALTERACOES EM TEMPO REAL USANDO EFFECT
 constructor(){
   this.carregarProdutos();
-effect(() => {
-  console.log('lista de produtos alterados: ', this.produtos());
-});
-effect(() => {
-  console.log('Valor Total Atualizado: ', this.valorTotal());
-});
+
 effect(() => {
   if (typeof document !== 'undefined') {
     document.title = `(${this.totalProdutos()}) - loja da jhennif`;
