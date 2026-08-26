@@ -1,10 +1,27 @@
+
 .produto-card{
     margin: 10px;
     height: 100%;
+
+    background-color: #fcebeb !important;
+    border: 1px solid #e5c4c4 !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
 }
 mat-card{
     display:flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+}
+mat-card-title{
+    color: #000000 !important;
+    font-weight: bold;
+}
+mat-card-content p {
+    color: #383838 !important;
+}
+mat-card-actions button {
+    border-radius: 20px !important;
+    color: #c95276;
 }
