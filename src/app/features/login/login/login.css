@@ -1,0 +1,73 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100%;
+    min-height: 100%;
+    margin-top: 100px;
+}
+h2{
+    text-align: center;
+    color: #222;
+    margin-bottom: 10px;
+}
+p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+.erro-login {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+form {
+    width: 350px;
+    padding: 35px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba( 0, 0, 0, 0.1);
+    text-align: center;
+}
+form p {
+    margin: 0 0 15px 0;
+
+}
+input{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background: transparent;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+    margin: 0;
+}
+input:focus {
+    border-color: #760079;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+input::placeholder {
+    color: #999;
+    text-align: center;
+}
+small {
+    display: block;
+    color: red;
+    margin-bottom: 0;
+    text-align: center;
+}
+button{
+    width: 50%;
+}
+
+button:disabled{
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background-color: #fb22ff;
+}
