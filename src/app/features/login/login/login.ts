@@ -8,10 +8,11 @@ import {
 import { Router } from '@angular/router';
 
 import { AuthFacade } from '../../../core/facades/auth.facade';
+import { MatAnchor } from "@angular/material/button";
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatAnchor],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
