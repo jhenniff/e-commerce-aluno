@@ -27,7 +27,9 @@ export class ListaProdutos {
 produtos = signal <ProdutoLoja[]>([]);
 
 produtoSelecionado =signal <string | null>(null);
+
 carregando = signal (true);
+
  erro = signal <string | null>(null);
 
 
@@ -120,6 +122,7 @@ effect(() => {
 
   quantidadeCarrinho = this.carrinhoFacade.quantidadeCarrinho;
  totalCarrinho = this.carrinhoFacade.totalCarrinho();
+
   adicionarAoCarrinho(produto: {nome: string; preco: number; }){
     this.carrinhoFacade.adicionarProdutoCarrinho(produto);
   }
