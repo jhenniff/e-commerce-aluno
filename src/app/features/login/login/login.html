@@ -1,12 +1,14 @@
-<h2>Login</h2>
-
-<p>Informe seus dados para simular a autenticação na loja.</p>
 
 @if (erroLogin()) {
-  <p style="color: red">Não foi possível realizar o login.</p>
+  <p class="erro-login">Não foi possível realizar o login.</p>
+
 }
 
 <form [formGroup]="formulario">
+<h2>Login</h2>
+
+<p>Informe seus dados </p>
+
   <p>
     <input
       type="email"
@@ -50,9 +52,8 @@
   }
 
   <p>
-    <button
-      type="button"
-      (click)="entrar()"
+    <button mat-raised-button class="btn-entrar" type="button" (click)="entrar()"
+
       [disabled]="formulario.invalid"
     >
       Entrar
