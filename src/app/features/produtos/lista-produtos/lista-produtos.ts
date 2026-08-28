@@ -12,10 +12,11 @@ import {CarrinhoFacade} from '../../../core/facades/carrinho.facade';
 import{ItemCarrinho} from '../../../core/models/item-carrinho';
 import { RouterLink} from '@angular/router';
 import {ProdutoLoja} from '../../../core/models/produto-loja';
+import { Favoritos } from '../favoritos/favoritos';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe, MatButtonModule, RouterLink],
+  imports: [Produto, PrecoFormatadoPipe, UpperCasePipe, MatButtonModule, RouterLink, Favoritos],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
@@ -118,17 +119,13 @@ effect(() => {
     }
   
 
-  public carrinhoFacade = inject(CarrinhoFacade);
+ public carrinhoFacade = inject(CarrinhoFacade);
 
-  quantidadeCarrinho = this.carrinhoFacade.quantidadeCarrinho;
- totalCarrinho = this.carrinhoFacade.totalCarrinho();
+ quantidadeCarrinho = this.carrinhoFacade.quantidadeCarrinho;
+ totalCarrinho = this.carrinhoFacade.totalCarrinho;
 
-  adicionarAoCarrinho(produto: {nome: string; preco: number; }){
-    this.carrinhoFacade.adicionarProdutoCarrinho(produto);
-  }
-
- 
-}
+ adicionarAoCarrinho(produto: { nome: string; preco:number}){
+  this.carrinhoFacade.adicionarProdutoCarrinho(produto);}
+ }
   
-
 
