@@ -5,17 +5,21 @@
     </mat-card-header>
 
     <mat-card-content>
-   <p>{{ preco | precoFormatado }}</p>
+     <p>{{ preco | precoFormatado }}</p>
     </mat-card-content>
 
     <mat-card-actions>
-
     <button mat-raised-button color="primary" (click)="selecionarProduto()">
-        Selecionar {{ nome }}
+        Selecionar
     </button>
-    <button  mat-raised-button color="accent" (click)="adicionarAoCarrinho()">
-        Adicionar ao Carrinho</button>
 
-</mat-card-actions>
+    <button  mat-raised-button color="accent" (click)="adicionarAoCarrinho()">
+        Adicionar ao Carrinho
+    </button>
+
+    <button mat-raised-button color="warn" (click)="favoritarProduto(nome)">
+        Favoritar
+    </button>
     
+  </mat-card-actions>
 </mat-card>
