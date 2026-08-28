@@ -1,0 +1,19 @@
+<div class="favoritos-container">
+    <h2>Favoritos</h2>
+
+
+    @if (favoritos().length ===0) {
+        <p>Nenhum produto favorito adicionado</p>
+     } @else {
+            <ul class="lista-Favoritos">
+                @for (item of favoritos(); track $index) {
+                    <li>
+                        <span>{{ item }}</span>
+                        <button (click)="removerFavoritos($index)">Remover</button>
+                    </li>
+                }
+            </ul>
+        }
+    
+</div>
+\
