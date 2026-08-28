@@ -25,3 +25,18 @@ mat-card-actions button {
     border-radius: 20px !important;
     color: #c95276;
 }
+mat-card-action {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+}
+button[mat-button]
+button[mat-raised-button] {
+    width: 100% ;
+    white-space: normal !important;
+    padding: 8px 12px !important;
+    height: auto !important;
+    min-height: 36px;
+    line-height: 1.2 !important;
+}
