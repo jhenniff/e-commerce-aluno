@@ -4,9 +4,11 @@
 
     <button mat-button routerLink="/">Início</button>
     <button mat-button routerLink="/produtos">Produtos</button>
+    <button matButton routerLink="/favoritos">Favoritos</button>
     <button mat-button routerLink="/carrinho">Carrinho | ({{quantidadeCarrinho()}})</button>
     <button mat-button routerLink="/checkout">Checkout</button>
     <button mat-button routerLink="/admin"> Admin</button>
+
 
     @if(usuarioLogado()){
         <span class="email-usuario">{{usuarioAtual()?.email}}</span>
