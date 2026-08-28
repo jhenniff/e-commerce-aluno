@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guard/auth.guard';
 import { adminGuard } from './core/guard/admin.guard';
+import { Favoritos } from './features/produtos/favoritos/favoritos';
 
 export const routes: Routes = [
+  { path: 'favoritos', component: Favoritos},
   {
     path: '',
     loadComponent: () =>
