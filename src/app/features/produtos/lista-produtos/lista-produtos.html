@@ -36,8 +36,10 @@
                 [preco] = "item.preco"
                 (produtoSelecionado)="exibirProduto($event)"
                 (ProdutoAdicionado)="adicionarAoCarrinho($event)"
+               
                 >
                 </app-produto>
+                
             }
  
         </section>
@@ -48,11 +50,13 @@
             <p class="texto-sucesso"> {{produtoSelecionado()}} </p>
           } @else {
             <p class =texto-neuto> Nenhum produto selecionado</p>
-          }
-        </section>>
-       </section> 
- 
+          } 
+          
+        </section>
        
+       
+       </section> 
+  
 
   
 
